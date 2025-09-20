@@ -48,6 +48,12 @@ docker compose exec backend python manage.py migrate
 Проект использует pytest + pytest-django + pytest-celery.
 Запуск тестов
 
+#### Mac/Linux
 ```bash
 docker compose exec backend pytest -v
+```
+
+#### Windows 
+```bash
+winpty docker compose exec backend pytest -v
 ```
