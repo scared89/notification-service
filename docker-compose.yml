@@ -1,0 +1,44 @@
+version: "3.9"
+
+services:
+  db:
+    image: postgres:14
+    restart: always
+    environment:
+      POSTGRES_DB: notifdb
+      POSTGRES_USER: notifuser
+      POSTGRES_PASSWORD: notifpass
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  redis:
+    image: redis:7
+    restart: always
+
+  backend:
+    env_file:
+      - .env
+    build: .
+    command: gunicorn notifproject.wsgi:application --bind 0.0.0.0:8000
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+      - redis
+
+  celery-worker:
+    env_file:
+      - .env
+    build: .
+    command: celery -A notifproject worker -l info
+    volumes:
+      - .:/app
+    depends_on:
+      - db
+      - redis
+      - backend
+
+volumes:
+  postgres_data:
