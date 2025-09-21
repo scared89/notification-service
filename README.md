@@ -39,8 +39,14 @@ ___
 
 ### 4. Применение миграций
 
+#### Mac/Linux
 ```bash
 docker compose exec backend python manage.py migrate
+```
+
+#### Windows
+```bash
+winpty docker compose exec backend python manage.py migrate
 ```
 
 ### 5. Тесты
